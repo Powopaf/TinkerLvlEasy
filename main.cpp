@@ -23,7 +23,22 @@
 
 #include <Keypad.h>
 
-// TODO: Write the pin configuration of the registers and the keypad configuration
+// Keypad configuration
+const byte ROWS = 4; 
+const byte COLS = 4; 
+
+char hexaKeys[ROWS][COLS] = {
+  {'1', '2', '3', 'A'},
+  {'4', '5', '6', 'B'},
+  {'7', '8', '9', 'C'},
+  {'*', '0', '#', 'D'}
+};
+
+byte rowPins[ROWS] = {9, 8, 7, 6}; 
+byte colPins[COLS] = {5, 4, 3, 2}; 
+
+Keypad kp = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS); 
+
 
 // The currently displayed numbers
 char currentCode[] = {'0', '0', '0', '0'};
@@ -33,13 +48,74 @@ char code[] = {'4', '2', '4', '2'};
 
 void setup()
 {
-//  Serial.begin(9600); // Debug
-  // TODO: Write the setup function
+//Serial.begin(9600); // Debug
+  pinMode(10, OUTPUT);
+  pinMode(11, OUTPUT);
+  pinMode(12, OUTPUT);
+  pinMode(13, OUTPUT);
+  
+  //digitalWrite(12, LOW);
+  //digitalWrite(13, LOW);
+  //digitalWrite(10, LOW);
+  //digitalWrite(11, LOW);
+  
+}
+
+void send()
+{
+  digitalWrite(13, HIGH);
+  digitalWrite(13, LOW);
+  digitalWrite(11,LOW);
+  digitalWrite(12, HIGH);
+  digitalWrite(12, LOW);
+}
+
+
+void toBinN(int n)
+{
+    while (n > 0) 
+    {
+      if (n % 2 == 1)
+      {
+        digitalWrite(11,HIGH);
+        
+      }
+      else
+      {
+        digitalWrite(11,LOW);
+      }
+      send();
+      n = n / 2;
+    }
 }
 
 
 void loop()
 {
-  // TODO: Write your main loop
-  delay(50); // For performances
+  int input = kp.getKey() - 48;
+  if(input >= 0 && input <= 9)
+  {
+  	toBinN(input);
+  }
+  else
+  {
+  	input += 48;
+    if(input == 'A')
+    {
+    
+    }
+    else if(input == 'C')
+    {
+    
+    }
+    else if(input == 'D')
+    {
+    
+    }
+		else if(input == '#')
+		{
+    
+		}
+	}
+	delay(50); // For performances
 }
